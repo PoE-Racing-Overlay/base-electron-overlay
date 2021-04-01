@@ -1,8 +1,9 @@
 import activeWindow from 'active-win';
+import { basename } from 'path';
 
 const APP_TITLES = ['Path of Exile'];
 const APP_TITLE_STARTS_WITH = ['Path of Exile <---> '];
-const APP_PATHS = [
+const APP_NAMES = [
   'pathofexile_x64_kg.exe',
   'pathofexile_kg.exe',
   'pathofexile_x64steam.exe',
@@ -28,18 +29,37 @@ class ActiveWindow {
    */
   isActive;
 
+  /**
+   * @type {Object}
+   */
+  config;
+
   constructor(config = {}) {
-    Object.assign(config, {});
+    this.config = Object.assign(config, {});
   }
 
   /**
-   * @returns {void}
+   * @returns {Boolean}
    */
   async applicationIsActive() {
     const current = await activeWindow();
-    if (current.id === activeWindow.id) {
-      return this.isActive;
-    } else {
+    if (!current) {
+      this.isActive = false;
+      return;
     }
+    if (current.id !== this.activeWindow.id) {
+      const path = current.owner.path;
+      const name = basename(path);
+      const title = current.title;
+      if (
+        APP_NAMES.includes(name) &&
+        APP_TITLES.includes(title) &&
+        APP_TITLE_STARTS_WITH.some(value => title.startsWith(value))
+      ) {
+        this.isActive = true;
+        this.activeWindow = current;
+      }
+    }
+    return this.isActive;
   }
 }
