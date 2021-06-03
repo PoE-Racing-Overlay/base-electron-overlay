@@ -5,9 +5,12 @@ import installExtension from 'electron-devtools-installer';
 import path from 'path';
 import './main/ipc';
 import winMgr from './main/WindowManager';
+import ActiveWindow from './main/ActiveWindow';
+import * as targetApplication from './main/config/target-application';
 dotenv.config({ path: path.resolve(__dirname, '..', '.env.local') });
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const scheme = process.env.SCHEME_NAME || 'overlay';
+let activeWindow;
 
 // Ensure we only ever have once instance of the application running
 if (!app.requestSingleInstanceLock()) {
@@ -49,6 +52,9 @@ function createWindow() {
   win.on('closed', () => {
     winMgr.destroyWindow('main');
   });
+
+  // start listening for when our target application is active
+  activeWindow = new ActiveWindow(targetApplication);
   return win;
 }
 

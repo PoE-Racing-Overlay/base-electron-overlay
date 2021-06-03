@@ -1,5 +1,5 @@
 {
-  "name": "local-stream-tools",
+  "name": "base-electron-overlay",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,6 +19,8 @@
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "electron-store": "^6.0.1",
+    "sass": "^1.32.8",
+    "ts-jest": "^26.5.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -49,7 +51,8 @@
     "spectron": "11.0.0",
     "typescript": "~3.9.3",
     "vue-cli-plugin-electron-builder": "^2.0.0-rc.5",
-    "vue-jest": "^5.0.0-0"
+    "vue-jest": "^5.0.0-0",
+    "webpack": "^4.45.0"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

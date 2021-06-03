@@ -1,11 +1,10 @@
+import { join } from 'path';
 import { BrowserWindow } from 'electron';
 
 /**
  * @type {Map<String,BrowserWindow>}
  */
 const children = new Map();
-
-const winMgr = new WindowManager();
 
 class WindowManager {
   /**
@@ -41,7 +40,7 @@ class WindowManager {
           // Use pluginOptions.nodeIntegration, leave this alone
           // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
           nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-          preload: path.join(__dirname, 'preload.js'),
+          preload: join(__dirname, 'preload.js'),
         },
       }),
     );
@@ -52,11 +51,15 @@ class WindowManager {
   /**
    * Remove a window from the application
    * @param {String} key
+   * @returns {void}
    */
   destroyWindow(key) {
-    children.get(key).close();
-    children.delete(key);
+    const child = children.get(key);
+    if (child) {
+      child.close();
+      children.delete(key);
+    }
   }
 }
-
+const winMgr = new WindowManager();
 export default winMgr;
